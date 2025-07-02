@@ -1,0 +1,58 @@
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}
+
+/* Custom animations */
+.nav-link {
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #94a3b8;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Code block styling */
+pre {
+    background-color: #1e293b;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border: 1px solid #334155;
+}
+
+code {
+    color: #f8fafc;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+/* Syntax highlighting */
+.hljs-keyword { color: #f472b6; }
+.hljs-string { color: #86efac; }
+.hljs-comment { color: #94a3b8; font-style: italic; }
+.hljs-title { color: #93c5fd; }
+.hljs-params { color: #fdba74; }

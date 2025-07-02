@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Shamveel | Cybersecurity Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-accent': '#3b82f6',
+                        'cyber-accent-light': '#cbd5e1',
+                        'cyber-accent-dark': '#64748b',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-out',
+                        'scale-in': 'scaleIn 0.6s ease-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        scaleIn: {
+                            '0%': { transform: 'scale(0.95)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .profile-container {
+            border: 1px solid #334155;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.15);
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+        }
+        
+        .sidebar-link {
+            transition: all 0.3s ease;
+            border: 1px solid #334155;
+        }
+        
+        .sidebar-link:hover {
+            background-color: rgba(30, 41, 59, 0.5);
+            border-color: #3b82f6;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="text-gray-300 min-h-screen flex flex-col">
+    <!-- Home Button -->
+    <div class="absolute top-6 left-6 z-10">
+        <a href="index.html" class="flex items-center text-cyber-accent-light hover:text-cyber-accent transition-colors">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            <span>Home</span>
+        </a>
+    </div>
+
+    <!-- Mobile Header (only visible on small screens) -->
+    <div class="lg:hidden text-center py-6">
+        <h1 class="text-2xl font-bold text-cyber-accent">Shamveel Khan</h1>
+        <p class="text-sm text-cyber-accent-light">Cybersecurity Student & Future Bug Bounty Hunter</p>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col lg:flex-row items-center justify-center py-8 px-4 md:px-8 overflow-y-auto">
+        <!-- Mobile Profile Picture (only visible on small screens) -->
+        <div class="w-full max-w-md mb-8 lg:hidden animate-scale-in">
+            <div class="profile-container w-full h-64 mx-auto">
+                <img src="assets/me.jpg" alt="Shamveel Khan" class="w-full h-full object-cover">
+            </div>
+        </div>
+        
+        <!-- About Text (mobile: first, desktop: right) -->
+        <div class="w-full lg:w-1/3 max-w-lg mb-10 lg:mb-0 lg:ml-12 animate-fade-in">
+            <div class="bg-gray-800/30 border border-gray-700 rounded-xl p-6">
+                <h1 class="text-3xl font-bold text-cyber-accent mb-4 hidden lg:block">
+                    Shamveel Khan
+                </h1>
+                <p class="mb-6 leading-relaxed text-gray-400">
+                    I'm a cybersecurity student at FAST-NUCES, working daily toward becoming a skilled bug bounty hunter. 
+                    My goal is to become financially independent by 2027. I specialize in web app security, scripting, 
+                    and tools like Burp Suite and Nmap.
+                </p>
+                <div class="p-4 border border-cyber-accent rounded-lg bg-gray-800/30">
+                    <div class="text-cyber-accent font-semibold">Current Focus</div>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        <span class="px-3 py-1 bg-cyber-accent-dark text-xs rounded">Web Hacking</span>
+                        <span class="px-3 py-1 bg-cyber-accent-dark text-xs rounded">DSA</span>
+                        <span class="px-3 py-1 bg-cyber-accent-dark text-xs rounded">Scripting</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Profile Picture (mobile: hidden, desktop: center) -->
+        <div class="hidden lg:flex w-2/5 max-w-xl justify-center mb-8 lg:mb-0 animate-scale-in">
+            <div class="profile-container w-80 h-96 flex items-center justify-center p-2">
+                <img src="assets/me.jpg" alt="Shamveel Khan" class="w-full h-full object-cover">
+            </div>
+        </div>
+        
+        <!-- Connect Section (mobile: last, desktop: left) -->
+        <div class="w-full lg:w-1/4 max-w-md animate-fade-in">
+            <div class="bg-gray-800 border border-gray-700 rounded-xl p-6">
+                <div class="mb-6">
+                    <h1 class="text-xl font-bold text-cyber-accent">
+                        <span class="text-gray-100">$</span> Connect
+                    </h1>
+                    <p class="text-sm text-gray-400 mt-1">Professional Links</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- GitHub Link -->
+                    <a href="https://github.com/shamveel" target="_blank" 
+                       class="sidebar-link flex items-center space-x-3 p-4 rounded-lg transition-all">
+                        <span class="text-2xl">🔗</span>
+                        <div>
+                            <div class="text-sm text-gray-400">GitHub</div>
+                        </div>
+                    </a>
+                    
+                    <!-- LinkedIn Link -->
+                    <a href="https://linkedin.com/in/shamveel" target="_blank" 
+                       class="sidebar-link flex items-center space-x-3 p-4 rounded-lg transition-all">
+                        <span class="text-2xl">💼</span>
+                        <div>
+                            <div class="text-sm text-gray-400">LinkedIn</div>
+                        </div>
+                    </a>
+                    
+                    <!-- Portfolio Link -->
+                    <a href="https://shamveel.github.io" target="_blank" 
+                       class="sidebar-link flex items-center space-x-3 p-4 rounded-lg transition-all">
+                        <span class="text-2xl">🌐</span>
+                        <div>
+                            <div class="text-sm text-gray-400">Portfolio</div>
+                        </div>
+                    </a>
+                </div>
+                
+                <div class="mt-6 p-4 bg-gray-700/50 rounded-lg border border-gray-600">
+                    <div class="text-sm text-cyber-accent">2027 Target</div>
+                    <div class="text-sm mt-2">Top-tier bug bounty hunter with financial independence</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="text-center py-4 text-sm text-gray-500 border-t border-gray-800">
+        © 2025 Shamveel Khan | Cybersecurity Portfolio
+    </div>
+</body>
+</html>

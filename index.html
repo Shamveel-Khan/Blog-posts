@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shamveel's Cybersecurity Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+         tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-accent': '#3b82f6',    // Vibrant blue
+                        'cyber-accent-light': '#cbd5e1', // Lighter accent
+                        'cyber-accent-dark': '#64748b',  // Darker accent
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 300ms ease-in-out',
+                        'slide-in': 'slideIn 300ms ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-900 text-gray-100 font-mono">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="lg:hidden fixed top-4 left-4 z-50 bg-gray-800 p-2 rounded-md border border-gray-700 transition-all duration-300 hover:border-cyber-accent">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-gray-800 border-r border-gray-700 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+        <div class="p-6">
+            <!-- Close button for mobile - hidden by default -->
+            <button id="sidebar-close-btn" class="absolute top-4 right-4 z-50 text-gray-400 hover:text-cyber-accent transition-colors hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+
+            <!-- Logo/Brand -->
+            <div class="mb-8">
+                <h1 class="text-xl font-bold text-cyber-accent">
+                    <span class="text-gray-100">$</span> cybersec_notes
+                </h1>
+                <p class="text-sm text-gray-400 mt-1">Security Research Hub</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="space-y-4">
+                <a href="#" class="flex items-center space-x-3 p-3 rounded-lg bg-gray-700 text-cyber-accent border border-gray-600">
+                    <span class="text-lg">🏠</span>
+                    <span>Home</span>
+                </a>
+                <a href="about.html" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                    <span class="text-lg">👨‍💻</span>
+                    <span>About the Developer</span>
+                </a>
+            </nav>
+
+            <!-- Search Section -->
+            <div class="mt-8">
+                <label class="flex items-center space-x-2 text-sm text-gray-400 mb-3">
+                    <span class="text-lg">🔍</span>
+                    <span>Filter Notes</span>
+                </label>
+                <input 
+                    type="text" 
+                    id="search-input" 
+                    placeholder="Type to search..."
+                    class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-100 placeholder-gray-400 focus:outline-none focus:border-cyber-accent focus:ring-1 focus:ring-cyber-accent transition-all duration-300"
+                >
+            </div>
+
+            <!-- Stats -->
+            <div class="mt-8 p-4 bg-gray-700 rounded-lg border border-gray-600 animate-fade-in">
+                <div class="text-sm text-gray-400">Total Notes</div>
+                <div id="notes-count" class="text-2xl font-bold text-cyber-accent">12</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay for mobile -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden transition-opacity duration-300"></div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 min-h-screen transition-transform duration-300">
+        <div class="p-6 lg:p-8">
+            <!-- Header -->
+            <header class="mb-8 pt-12 lg:pt-0">
+                <h1 class="text-3xl lg:text-4xl font-bold mb-2 animate-fade-in">
+                    <span class="text-cyber-accent">Shamveel's</span> Cybersecurity Notes
+                </h1>
+                <p class="text-gray-400 text-lg">A collection of security research, tools, and techniques</p>
+                <div class="mt-4 flex items-center space-x-4 text-sm text-gray-500">
+                    <span>Last updated: July 2025</span>
+                    <span>•</span>
+                    <span id="filtered-count">12 notes available</span>
+                </div>
+            </header>
+
+            <!-- Notes Grid -->
+            <div id="notes-container" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"></div>
+
+            <!-- No Results Message -->
+            <div id="no-results" class="hidden text-center py-12">
+                <div class="text-6xl mb-4">🔍</div>
+                <h3 class="text-xl font-semibold text-gray-400 mb-2">No notes found</h3>
+                <p class="text-gray-500">Try adjusting your search terms</p>
+            </div>
+        </div>
+    </main>
+    <script src="js/main.js"></script>
+</body>
+</html>

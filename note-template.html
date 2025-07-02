@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS Attacks | Shamveel's Cybersecurity Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-accent': '#3b82f6',    // Vibrant blue
+                        'cyber-accent-light': '#cbd5e1', // Lighter accent
+                        'cyber-accent-dark': '#64748b',  // Darker accent
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 300ms ease-in-out',
+                        'slide-in': 'slideIn 300ms ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="css/noteStyle.css">
+</head>
+<body class="bg-gray-900 text-gray-100 font-mono">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="lg:hidden fixed top-4 left-4 z-50 bg-gray-800 p-2 rounded-md border border-gray-700 transition-all duration-300 hover:border-cyber-accent">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-gray-800 border-r border-gray-700 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+        <div class="p-6">
+            <!-- Close button for mobile - hidden by default -->
+            <button id="sidebar-close-btn" class="absolute top-4 right-4 z-50 text-gray-400 hover:text-cyber-accent transition-colors hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+
+            <!-- Logo/Brand -->
+            <div class="mb-8">
+                <h1 class="text-xl font-bold text-cyber-accent">
+                    <span class="text-gray-100">$</span> cybersec_notes
+                </h1>
+                <p class="text-sm text-gray-400 mt-1">Security Research Hub</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="space-y-4">
+                <a href="index.html" class="flex items-center space-x-3 p-3 rounded-lg bg-gray-700 text-cyber-accent border border-gray-600">
+                    <span class="text-lg">🏠</span>
+                    <span>Home</span>
+                </a>
+                <a href="#about" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                    <span class="text-lg">👨‍💻</span>
+                    <span>About the Developer</span>
+                </a>
+            </nav>
+
+            <!-- Word Count Section -->
+            <div class="mt-8">
+                <label class="flex items-center space-x-2 text-sm text-gray-400 mb-3">
+                    <span class="text-lg">📊</span>
+                    <span>Word Count</span>
+                </label>
+                <div id="word-count" class="text-xl font-bold text-cyber-accent">0</div>
+            </div>
+
+            <!-- Stats -->
+            <div class="mt-8 p-4 bg-gray-700 rounded-lg border border-gray-600 animate-fade-in">
+                <div class="text-sm text-gray-400">Note Details</div>
+                <div class="mt-2 text-sm text-gray-300">
+                    <div>Created: July 1, 2025</div>
+                    <div class="mt-1">Updated: July 3, 2025</div>
+                    <div class="mt-2 flex flex-wrap gap-1">
+                        <span class="bg-red-900 text-red-200 px-2 py-1 rounded text-xs">Critical</span>
+                        <span class="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs">Web Security</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay for mobile -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden transition-opacity duration-300"></div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 min-h-screen transition-transform duration-300">
+        <div class="p-6 lg:p-8">
+            <!-- Note Header -->
+            <header class="mb-8 pb-4 border-b border-gray-700">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h1 class="text-3xl lg:text-4xl font-bold mb-2 text-cyber-accent">
+                            Cross-Site Scripting (XSS) Attacks
+                        </h1>
+                        <div class="flex items-center space-x-4 text-sm text-gray-500">
+                            <span>Last updated: July 3, 2025</span>
+                            <span>•</span>
+                            <span id="reading-time">Reading time: 0 min</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="text-xs bg-red-900 text-red-200 px-2 py-1 rounded">Critical</span>
+                        <span class="text-xs bg-blue-900 text-blue-200 px-2 py-1 rounded">Web Security</span>
+                        <span class="text-xs bg-purple-900 text-purple-200 px-2 py-1 rounded">OWASP Top 10</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Note Content -->
+            <article id="note-content" class="prose prose-invert max-w-none text-gray-300">
+                <h2 class="text-2xl font-bold text-cyber-accent mt-8 mb-4">Introduction to XSS</h2>
+                <p>
+                    Cross-Site Scripting (XSS) attacks are a type of injection where malicious scripts are injected 
+                    into otherwise benign and trusted websites. XSS attacks occur when an attacker uses a web 
+                    application to send malicious code, generally in the form of a browser side script, to a different 
+                    end user.
+                </p>
+                
+                <h2 class="text-2xl font-bold text-cyber-accent mt-8 mb-4">Types of XSS Attacks</h2>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-3 text-cyber-accent-light">1. Stored XSS</h3>
+                <p>
+                    The malicious script is permanently stored on the target servers (in a database, message forum, 
+                    visitor log, etc.). The victim then retrieves the malicious script from the server when it requests 
+                    the stored information.
+                </p>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-3 text-cyber-accent-light">2. Reflected XSS</h3>
+                <p>
+                    The malicious script comes from the current HTTP request. The injected script is reflected off the 
+                    web server, such as in an error message, search result, or any response that includes some or all 
+                    of the input sent to the server as part of the request.
+                </p>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-3 text-cyber-accent-light">3. DOM-based XSS</h3>
+                <p>
+                    The vulnerability exists in client-side code rather than server-side code. The attacker's payload 
+                    is executed as a result of modifying the DOM environment in the victim's browser.
+                </p>
+                
+                <h2 class="text-2xl font-bold text-cyber-accent mt-8 mb-4">Common XSS Payloads</h2>
+                
+                <p>Here are some common XSS payloads that attackers use:</p>
+                
+                <pre><code class="language-html">&lt;script&gt;alert('XSS')&lt;/script&gt;
+&lt;img src=x onerror=alert('XSS')&gt;
+&lt;svg onload=alert('XSS')&gt;&lt;/svg&gt;
+&lt;body onload=alert('XSS')&gt;</code></pre>
+                
+                <h2 class="text-2xl font-bold text-cyber-accent mt-8 mb-4">Prevention Techniques</h2>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-3 text-cyber-accent-light">Input Sanitization</h3>
+                <p>
+                    Always sanitize user input. Remove or encode any potentially dangerous characters. Use libraries 
+                    like DOMPurify to sanitize HTML.
+                </p>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-3 text-cyber-accent-light">Content Security Policy (CSP)</h3>
+                <p>
+                    Implement a strong Content Security Policy to prevent the execution of unauthorized scripts. 
+                    Example CSP header:
+                </p>
+                
+                <pre><code class="language-http">Content-Security-Policy: default-src 'self'; script-src 'self' https://trusted.cdn.com; object-src 'none';</code></pre>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-3 text-cyber-accent-light">HTTPOnly Cookies</h3>
+                <p>
+                    Mark cookies as HTTPOnly to prevent them from being accessed by client-side scripts. This helps 
+                    mitigate the impact of XSS attacks.
+                </p>
+                
+                <pre><code class="language-javascript">// Setting HTTPOnly cookie in Express.js
+res.cookie('session', 'value', { 
+    httpOnly: true,
+    secure: true,
+    sameSite: 'strict'
+});</code></pre>
+                
+                <h3 class="text-xl font-semibold mt-6 mb-3 text-cyber-accent-light">X-XSS-Protection Header</h3>
+                <p>
+                    Although deprecated in modern browsers, you can still set this header for older browsers:
+                </p>
+                
+                <pre><code class="language-http">X-XSS-Protection: 1; mode=block</code></pre>
+                
+                <h2 class="text-2xl font-bold text-cyber-accent mt-8 mb-4">Testing for XSS Vulnerabilities</h2>
+                
+                <p>Use these tools and techniques to test for XSS vulnerabilities:</p>
+                
+                <ul class="list-disc list-inside space-y-2 pl-5 mt-3">
+                    <li>Manual testing with various payloads</li>
+                    <li>Burp Suite's Scanner</li>
+                    <li>OWASP ZAP</li>
+                    <li>XSSer automation tool</li>
+                    <li>Browser extensions like XSS Hunter</li>
+                </ul>
+                
+                <div class="mt-8 p-4 bg-gray-800 border border-cyber-accent rounded-lg">
+                    <h3 class="text-lg font-semibold text-cyber-accent mb-2">Best Practice:</h3>
+                    <p>
+                        Always treat user input as untrusted. Implement multiple layers of defense including 
+                        input validation, output encoding, and proper security headers.
+                    </p>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <script src="js/notes.js"></script>
+</body>
+</html>

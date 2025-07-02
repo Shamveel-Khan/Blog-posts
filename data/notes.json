@@ -1,0 +1,98 @@
+[
+    {
+        "title": "XSS Attacks",
+        "excerpt": "Cross-site scripting vulnerabilities, payloads, and prevention techniques.",
+        "path": "notes/xss-attacks.html",
+        "tags": ["Critical"],
+        "category": "Web Security",
+        "date": "Updated 2 days ago"
+    },
+    {
+        "title": "Burp Suite Cheatsheet",
+        "excerpt": "Essential Burp Suite shortcuts, extensions, and workflow optimization.",
+        "path": "notes/burp-suite-cheatsheet.html",
+        "tags": ["Tools"],
+        "category": "Tools & Utilities",
+        "date": "Updated 1 week ago"
+    },
+    {
+        "title": "SQL Injection",
+        "excerpt": "SQLi techniques, payloads, and database-specific exploitation methods.",
+        "path": "notes/sql-injection.html",
+        "tags": ["Critical"],
+        "category": "Web Security",
+        "date": "Updated 3 days ago"
+    },
+    {
+        "title": "Nmap Scanning",
+        "excerpt": "Network reconnaissance with Nmap: port scanning, service detection, and NSE scripts.",
+        "path": "notes/nmap-scanning.html",
+        "tags": ["Recon"],
+        "category": "Network Security",
+        "date": "Updated 5 days ago"
+    },
+    {
+        "title": "Privilege Escalation",
+        "excerpt": "Linux and Windows privilege escalation techniques and automation tools.",
+        "path": "notes/privilege-escalation.html",
+        "tags": ["Post-Exploit"],
+        "category": "Post Exploitation",
+        "date": "Updated 1 week ago"
+    },
+    {
+        "title": "OWASP Top 10",
+        "excerpt": "Complete breakdown of OWASP Top 10 vulnerabilities with testing methodologies.",
+        "path": "notes/owasp-top10.html",
+        "tags": ["Reference"],
+        "category": "Web Security",
+        "date": "Updated 2 weeks ago"
+    },
+    {
+        "title": "Metasploit Framework",
+        "excerpt": "Metasploit commands, payload generation, and post-exploitation modules.",
+        "path": "notes/metasploit-framework.html",
+        "tags": ["Exploitation"],
+        "category": "Exploitation",
+        "date": "Updated 4 days ago"
+    },
+    {
+        "title": "Active Directory",
+        "excerpt": "AD enumeration, attacks, and persistence techniques for Windows environments.",
+        "path": "notes/active-directory.html",
+        "tags": ["Windows"],
+        "category": "Windows Security",
+        "date": "Updated 6 days ago"
+    },
+    {
+        "title": "Reverse Shells",
+        "excerpt": "Collection of reverse shell payloads for various languages and platforms.",
+        "path": "notes/reverse-shells.html",
+        "tags": ["Payloads"],
+        "category": "Payloads",
+        "date": "Updated 3 days ago"
+    },
+    {
+        "title": "Wireshark Analysis",
+        "excerpt": "Network traffic analysis, protocol dissection, and forensics with Wireshark.",
+        "path": "notes/wireshark-analysis.html",
+        "tags": ["Forensics"],
+        "category": "Network Forensics",
+        "date": "Updated 1 week ago"
+    },
+    {
+        "title": "OSINT Techniques",
+        "excerpt": "Open source intelligence gathering tools and methodologies.",
+        "path": "notes/osint-techniques.html",
+        "tags": ["Intel"],
+        "category": "Intelligence",
+        "date": "Updated 5 days ago"
+    },
+    {
+        "title": "Docker Security",
+        "excerpt": "Container security, Docker escapes, and Kubernetes attack vectors.",
+        "path": "notes/docker-security.html",
+        "tags": ["Containers"],
+        "category": "Container Security",
+        "date": "Updated 1 week ago"
+    }
+]
