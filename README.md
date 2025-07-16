@@ -59,6 +59,6 @@ Feel free to connect with me:
 
 - GitHub: [github.com/Shamveel-Khan](https://github.com/Shamveel-Khan)
 - LinkedIn: [linkedin.com/in/shamveel-khan](https://www.linkedin.com/in/shamveel-khan)
-- Portfolio: [shamveelportfolio.vercel.app(https://shamveelportfolio.vercel.app/)
+- Portfolio: [shamveelportfolio.vercel.app](https://shamveelportfolio.vercel.app/)
 
 ---
