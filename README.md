@@ -57,8 +57,8 @@ You can explore the full site hosted via GitHub Pages:
 
 Feel free to connect with me:
 
-- GitHub: [github.com/shamveel](https://github.com/shamveel)
-- LinkedIn: [linkedin.com/in/shamveel](https://linkedin.com/in/shamveel)
-- Portfolio: [shamveel.github.io](https://shamveel.github.io)
+- GitHub: [github.com/Shamveel-Khan](https://github.com/Shamveel-Khan)
+- LinkedIn: [linkedin.com/in/shamveel-khan](https://www.linkedin.com/in/shamveel-khan)
+- Portfolio: [shamveelportfolio.vercel.app(https://shamveelportfolio.vercel.app/)
 
 ---
