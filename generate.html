@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Note - Shamveel's Cybersecurity Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/typography@0.5.9/dist/typography.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-accent': '#3b82f6',
+                        'cyber-accent-light': '#cbd5e1',
+                        'cyber-accent-dark': '#64748b',
+                        'dark-900': '#0a0a0f',
+                        'dark-800': '#111118',
+                        'dark-700': '#1a1a25'
+                    },
+                    fontFamily: {
+                        'mono': ['"Fira Code"', '"Courier New"', 'monospace'],
+                        'sans': ['Inter', 'sans-serif']
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 300ms ease-in-out',
+                        'slide-in': 'slideIn 300ms ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(0)' }
+                        }
+                    }
+                }
+            },
+            plugins: [
+            ]
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0f;
+            color: #f0f0f0;
+        }
+        
+        .prose {
+            max-width: none;
+        }
+        /* Only override heading color, not font-size, to let Tailwind Typography handle sizes */
+        .prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+            color: #3b82f6;
+        }
+        /* Custom heading sizes to mimic Tailwind Typography plugin */
+        .prose h1 {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .prose h2 {
+            font-size: 1.5rem;
+            line-height: 2rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .prose h3 {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            font-weight: 600;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose h4 {
+            font-size: 1.125rem;
+            line-height: 1.5rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose h5 {
+            font-size: 1rem;
+            line-height: 1.25rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+        .prose h6 {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .prose code {
+            background-color: #1a1a25;
+            color: #cbd5e1;
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.875em;
+        }
+        
+        .prose pre {
+            background-color: #1a1a25;
+            border: 1px solid #374151;
+        }
+        
+        .prose pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        .prose blockquote {
+            border-left: 4px solid #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        
+        .prose a {
+            color: #3b82f6;
+        }
+        
+        .prose a:hover {
+            color: #60a5fa;
+        }
+        
+        .prose table {
+            border-collapse: collapse;
+        }
+        
+        .prose th, .prose td {
+            border: 1px solid #374151;
+            padding: 0.5rem;
+        }
+        
+        .prose th {
+            background-color: #1a1a25;
+        } 
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #111118;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #60a5fa;
+        }
+        /* Fix for modal buttons: ensure text is visible on all backgrounds */
+        #success-modal button,
+        #export-modal button,
+        #export-modal input,
+        #export-modal select {
+            color: #f0f0f0 !important;
+        }
+        #success-modal button.bg-white,
+        #export-modal button.bg-white {
+            color: #222 !important;
+        }
+        /* If any button has a white background, force text to dark */
+        #success-modal button,
+        #export-modal button {
+            border: 1px solid #374151;
+        }
+        /* Ensure visible text in export modal input and select fields */
+        #export-modal input,
+        #export-modal select {
+            color: #f0f0f0 !important;
+            background-color: #1a1a25 !important;
+            border: 1px solid #374151 !important;
+        }
+        /* Custom blue for preview and download HTML buttons */
+        #preview-toggle,
+        #download-html {
+            background-color: rgb(37 99 235 / var(--tw-bg-opacity, 1));
+            --tw-bg-opacity: 1;
+            color: #fff;
+        }
+        #preview-toggle:hover,
+        #download-html:hover {
+            background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1)); /* lighter blue on hover */
+        }
+    </style>
+</head>
+<body class="bg-dark-900 text-gray-100 min-h-screen">
+    <!-- Mobile Header -->
+    <header class="lg:hidden fixed top-0 left-0 right-0 bg-gray-800 z-30 p-4 flex justify-between items-center border-b border-gray-700">
+        <h1 class="text-xl font-bold text-cyber-accent">Generate Note</h1>
+        <button id="mobile-menu-button" class="text-cyber-accent focus:outline-none">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
+    </header>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-gray-800 border-r border-gray-700 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+        <div class="p-6">
+            <button id="sidebar-close-btn" class="absolute top-4 right-4 z-50 text-gray-400 hover:text-cyber-accent transition-colors lg:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+
+            <div class="mb-8">
+                <h1 class="text-xl font-bold text-cyber-accent">
+                    <span class="text-gray-100">$</span> cybersec_notes
+                </h1>
+                <p class="text-sm text-gray-400 mt-1">Security Research Hub</p>
+            </div>
+
+            <div class="space-y-6">
+                <div>
+                    <label class="flex items-center space-x-2 text-sm text-gray-400 mb-3">
+                        <span class="text-lg">📊</span>
+                        <span>Word Count</span>
+                    </label>
+                    <div id="word-count" class="text-xl font-bold text-cyber-accent">0</div>
+                    <div class="text-xs text-gray-500 mt-1">
+                        <span id="char-count">0</span> characters
+                    </div>
+                </div>
+
+                <div>
+                    <label class="text-sm text-gray-400 mb-2 block">📝 Markdown Guide</label>
+                    <ul class="text-sm space-y-1 text-gray-300">
+                        <li><code class="text-xs bg-dark-700 px-1 rounded">#</code> Heading 1</li>
+                        <li><code class="text-xs bg-dark-700 px-1 rounded">##</code> Heading 2</li>
+                        <li><code class="text-xs bg-dark-700 px-1 rounded">**bold**</code>, <code class="text-xs bg-dark-700 px-1 rounded">*italic*</code></li>
+                        <li><code class="text-xs bg-dark-700 px-1 rounded">`inline code`</code></li>
+                        <li><code class="text-xs bg-dark-700 px-1 rounded">``` code blocks ```</code></li>
+                        <li><code class="text-xs bg-dark-700 px-1 rounded">[Link](url)</code></li>
+                        <li><code class="text-xs bg-dark-700 px-1 rounded">![Image](img.png)</code></li>
+                        <li><code class="text-xs bg-dark-700 px-1 rounded">- List item</code></li>
+                        <li><code class="text-xs bg-dark-700 px-1 rounded">1. Numbered</code></li>
+                        <li><code class="text-xs bg-dark-700 px-1 rounded">> Quote</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay for mobile sidebar -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-70 z-30 hidden lg:hidden"></div>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 pt-20 lg:pt-0 min-h-screen">
+        <div class="max-w-6xl mx-auto p-6">
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-cyber-accent mb-2">Generate Note</h1>
+                <p class="text-gray-400">Write, preview, and export your cybersecurity notes</p>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="flex flex-wrap gap-4 mb-6">
+                <button id="preview-toggle" class="bg-cyber-accent hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
+                    <i class="fas fa-eye"></i>
+                    <span>Preview</span>
+                </button>
+                <button id="export-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition flex items-center gap-2">
+                    <i class="fas fa-download"></i>
+                    <span>Noted!</span>
+                </button>
+            </div>
+
+            <!-- Editor/Preview Area -->
+            <div class="bg-gray-800 border border-gray-700 rounded-lg overflow-hidden">
+                <!-- Editor -->
+                <div id="editor-container" class="h-96 lg:h-[600px]">
+                    <textarea 
+                        id="markdown-editor" 
+                        class="w-full h-full p-4 bg-transparent text-gray-100 resize-none focus:outline-none font-mono text-sm"
+                        placeholder="Start writing your cybersecurity note in Markdown..."
+                    ></textarea>
+                </div>
+
+                <!-- Preview -->
+                <div id="preview-container" class="hidden h-96 lg:h-[600px] overflow-y-auto">
+                    <div id="preview-content" class="p-4 prose prose-invert max-w-none">
+                        <p class="text-gray-500 italic">Your preview will appear here...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Export Modal -->
+    <div id="export-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg w-full max-w-md border border-gray-700 animate-fade-in">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-cyber-accent">Export Note</h2>
+                    <button id="modal-close" class="text-gray-400 hover:text-white">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form id="export-form" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                        <input type="text" id="note-title" class="w-full bg-dark-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyber-accent" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">File Name</label>
+                        <input type="text" id="file-name" class="w-full bg-dark-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyber-accent" placeholder="xss-attacks.html" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Tags</label>
+                        <input type="text" id="tags" class="w-full bg-dark-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyber-accent" placeholder="Critical, Web Security">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Category</label>
+                        <select id="category" class="w-full bg-dark-700 border border-gray-600 rounded-lg px-3 py-2 text-white focus:outline-none focus:border-cyber-accent">
+                            <option value="Web Security">Web Security</option>
+                            <option value="Network Security">Network Security</option>
+                            <option value="Exploitation">Exploitation</option>
+                            <option value="Tools">Tools</option>
+                            <option value="Recon">Recon</option>
+                            <option value="Defensive">Defensive</option>
+                            <option value="Malware">Malware</option>
+                            <option value="Infrastructure">Infrastructure</option>
+                            <option value="Human Factor">Human Factor</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="flex gap-3 pt-4">
+                        <button type="submit" class="flex-1 bg-cyber-accent hover:bg-blue-600 text-white py-2 rounded-lg transition">
+                            Export
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Success Modal -->
+    <div id="success-modal" class="fixed inset-0 bg-black bg-opacity-70 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-gray-800 rounded-lg w-full max-w-md border border-gray-700 animate-fade-in">
+            <div class="p-6">
+                <div class="text-center mb-4">
+                    <i class="fas fa-check-circle text-green-500 text-4xl mb-3"></i>
+                    <h2 class="text-xl font-bold text-white">Export Complete!</h2>
+                </div>
+
+                <div class="space-y-3">
+                    <button id="download-html" class="w-full bg-cyber-accent hover:bg-blue-600 text-white py-2 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-file-code"></i>
+                        Download HTML
+                    </button>
+                    
+                    <button id="copy-json" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-copy"></i>
+                        Copy JSON
+                    </button>
+                    
+                    <button id="download-json" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded-lg transition flex items-center justify-center gap-2">
+                        <i class="fas fa-download"></i>
+                        Download JSON
+                    </button>
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-gray-600">
+                    <button id="success-close" class="w-full bg-gray-700 hover:bg-gray-600 text-white py-2 rounded-lg transition">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/generate-script.js"></script>
+</body>
+</html>

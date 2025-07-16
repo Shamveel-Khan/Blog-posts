@@ -59,3 +59,115 @@
             opacity: 0;
         }
     }
+    /* Base Styles */
+  
+  /* Header Styles */
+  .article-header {
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #1e3a8a;
+    padding-bottom: 1rem;
+  }
+  
+  .article-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .article-title {
+      font-size: 2.5rem;
+    }
+  }
+  
+  /* Article Content */
+  #note-content {
+    color: #d1d5db;
+  }
+  
+  #note-content h2 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 2rem 0 1rem;
+    color: #00f0ff;
+  }
+  
+  #note-content h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.75rem;
+    color: #00c8d7;
+  }
+  
+  #note-content p {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+  }
+  
+  /* Code Blocks */
+  pre {
+    background-color: #1e293b;
+    border-radius: 0.5rem;
+    padding: 1rem;
+    overflow-x: auto;
+    margin: 1.5rem 0;
+    border-left: 3px solid #00f0ff;
+  }
+  
+  code {
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-size: 0.95rem;
+    color: #f0f0f0;
+  }
+  
+  /* Lists */
+  #note-content ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  #note-content li {
+    margin-bottom: 0.75rem;
+    padding-left: 0.5rem;
+  }
+  
+  #note-content li::marker {
+    color: #00c8d7;
+  }
+  
+  /* Note Box */
+  #note-content {
+    background-color: #1f2937;
+    border: 1px solid #00f0ff;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    margin: 2rem 0;
+  }
+  
+  #note-content h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+    color: #00f0ff;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .metadata {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+    
+    .article-title {
+      font-size: 1.75rem;
+    }
+    
+    #note-content h2 {
+      font-size: 1.5rem;
+    }
+    
+    #note-content h3 {
+      font-size: 1.15rem;
+    }
+  }
