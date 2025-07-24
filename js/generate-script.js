@@ -267,7 +267,9 @@
         #note-content a {
             color: #3b82f6;
         }
-        
+        #note-content p {
+            margin-top: 7px;
+        }
         #note-content a:hover {
             color: #60a5fa;
         }
