@@ -19,5 +19,13 @@
         ],
         "category": "Web Security",
         "date": "2025-07-24"
+    },
+    {
+        "title": "XSS-Expert#1",
+        "excerpt": "🧠 Lab: AngularJS Sandbox Escape via Prototype Pollution\n\n 🔍 Vulnerability Summary:\n\nThis lab demonstrates a sandbox escape in AngularJS using protot...",
+        "path": "notes/xssexpert1.html",
+        "tags": [],
+        "category": "Web Security",
+        "date": "2025-07-24"
     }
 ]
