@@ -8,5 +8,16 @@
         ],
         "category": "Exploitation",
         "date": "2025-07-14"
+    },
+    {
+        "title": "XSS-intermediate",
+        "excerpt": "🧠 Intermediate to Advanced XSS Attack Flow\n\n\n\n</br>\n\n\n ✅ 1. Test Classic Injection First\n\n Try:\n\n  html\n  <script>alert(1)</script>\n  \n If blocked → ...",
+        "path": "notes/xssintermediate.html",
+        "tags": [
+          "Web Security",
+          "Exploitation"
+        ],
+        "category": "Web Security",
+        "date": "2025-07-24"
     }
 ]

