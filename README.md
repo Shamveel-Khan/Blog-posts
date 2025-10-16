@@ -8,7 +8,7 @@ This site is built to document my journey, share research notes, tools, cheatshe
 ## 🌐 Live Blog
 
 You can explore the full site hosted via GitHub Pages:  
-🔗 [shamveel.github.io/notes](https://shamveel.github.io/notes)
+🔗 [shamveel-khan.github.io/Blog-posts](https://shamveel-khan.github.io/Blog-posts/)
 
 ---
 
