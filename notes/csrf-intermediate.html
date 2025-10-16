@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSRF-Intermediate | Shamveel's Cybersecurity Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-accent': '#3b82f6',
+                        'cyber-accent-light': '#cbd5e1',
+                        'cyber-accent-dark': '#64748b',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 300ms ease-in-out',
+                        'slide-in': 'slideIn 300ms ease-in-out',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideIn: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="../css/noteStyle.css">
+    <style>
+        #note-content h1 {
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #3b82f6;
+        }
+        #note-content h2 {
+            font-size: 1.5rem;
+            line-height: 2rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            color: #3b82f6;
+        }
+        #note-content h3 {
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            font-weight: 600;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: #3b82f6;
+        }
+        #note-content h4 {
+            font-size: 1.125rem;
+            line-height: 1.5rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: #3b82f6;
+        }
+        #note-content h5 {
+            font-size: 1rem;
+            line-height: 1.25rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: #3b82f6;
+        }
+        #note-content h6 {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+            margin-bottom: 0.25rem;
+            color: #3b82f6;
+        }
+        
+        #note-content code {
+            background-color: #0e3855;
+            color: #cbd5e1;
+            padding: 0.2em 0.4em;
+            border-radius: 0.25rem;
+            font-size: 0.875em;
+        }
+        
+        #note-content pre {
+            background-color: #1a1a25;
+            border: 1px solid #374151;
+            margin:0;
+        }
+        
+        #note-content pre code {
+            background-color: transparent;
+            padding: 0;
+        }
+        
+        #note-content blockquote {
+            border-left: 4px solid #3b82f6;
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+        
+        #note-content a {
+            color: #3b82f6;
+        }
+        #note-content p {
+            margin-top: 7px;
+        }
+        #note-content a:hover {
+            color: #60a5fa;
+        }
+        
+        #note-content table {
+            border-collapse: collapse;
+        }
+        
+        #note-content th, #note-content td {
+            border: 1px solid #374151;
+            padding: 0.5rem;
+        }
+        
+        #note-content th {
+            background-color: #1a1a25;
+        } 
+        
+        #note-content ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #note-content ::-webkit-scrollbar-track {
+            background: #111118;
+        }
+        
+        #note-content ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        
+        #note-content ::-webkit-scrollbar-thumb:hover {
+            background: #60a5fa;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 font-mono">
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="lg:hidden fixed top-4 left-4 z-50 bg-gray-800 p-2 rounded-md border border-gray-700 transition-all duration-300 hover:border-cyber-accent">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+    </button>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-gray-800 border-r border-gray-700 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out z-40">
+        <div class="p-6">
+            <button id="sidebar-close-btn" class="absolute top-4 right-4 z-50 text-gray-400 hover:text-cyber-accent transition-colors hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            <div class="mb-8">
+                <h1 class="text-xl font-bold text-cyber-accent">
+                    <span class="text-gray-100">$</span> cybersec_notes
+                </h1>
+                <p class="text-sm text-gray-400 mt-1">Security Research Hub</p>
+            </div>
+            <nav class="space-y-4">
+                <a href="../index.html" class="flex items-center space-x-3 p-3 rounded-lg bg-gray-700 text-cyber-accent border border-gray-600">
+                    <span class="text-lg">🏠</span>
+                    <span>Home</span>
+                </a>
+                <a href="../about.html" class="nav-link flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-700 transition-colors">
+                    <span class="text-lg">👨‍💻</span>
+                    <span>About the Developer</span>
+                </a>
+            </nav>
+            <div class="mt-8">
+                <label class="flex items-center space-x-2 text-sm text-gray-400 mb-3">
+                    <span class="text-lg">📊</span>
+                    <span>Word Count</span>
+                </label>
+                <div id="word-count" class="text-xl font-bold text-cyber-accent"></div>
+                <div class="text-xs text-gray-500 mt-1">
+                        <span id="char-count">26108</span> characters
+                </div>
+            </div>
+            <div class="mt-8 p-4 bg-gray-700 rounded-lg border border-gray-600 animate-fade-in">
+                <div class="text-sm text-gray-400">Note Details</div>
+                <div class="mt-2 text-sm text-gray-300">
+                    <div class="mt-1">Updated: 2025-10-16</div>
+                    <div class="mt-2 flex flex-wrap gap-1">
+                        <span class="bg-red-900 text-red-200 px-2 py-1 rounded text-xs">Critical</span> <span class="bg-red-900 text-red-200 px-2 py-1 rounded text-xs">Web Security</span>
+                        <span class="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs">Web Security</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden hidden transition-opacity duration-300"></div>
+    <main class="lg:ml-64 min-h-screen transition-transform duration-300">
+        <div class="p-6 lg:p-8">
+            <header class="mb-8 pb-4 border-b border-gray-700">
+                <div class="flex items-start justify-between">
+                    <div>
+                        <h1 class="text-3xl lg:text-4xl font-bold mb-2 text-cyber-accent">
+                            CSRF-Intermediate
+                        </h1>
+                        <div class="flex items-center space-x-4 text-sm text-gray-500">
+                            <span>Last updated: 2025-10-16</span>
+                            <span>•</span>
+                            <span id="reading-time">Reading time: 0 min</span>
+                        </div>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="bg-red-900 text-red-200 px-2 py-1 rounded text-xs">Critical</span> <span class="bg-red-900 text-red-200 px-2 py-1 rounded text-xs">Web Security</span>
+                        <span class="bg-blue-900 text-blue-200 px-2 py-1 rounded text-xs">Web Security</span>
+                    </div>
+                </div>
+            </header>
+            <article id="note-content" class="prose prose-invert max-w-none text-gray-300">
+                <h1 data-start="340" data-end="373">SameSite quick recap (one line)</h1>
+<p data-start="374" data-end="444">SameSite controls when browsers send cookies on cross-site requests:</p>
+<ul data-start="445" data-end="699">
+<li data-start="445" data-end="489">
+<p data-start="447" data-end="489"><strong data-start="447" data-end="457">Strict</strong> = only same-site navigations.</p>
+</li>
+<li data-start="490" data-end="603">
+<p data-start="492" data-end="603"><strong data-start="492" data-end="499">Lax</strong> = allows top-level navigations (clicks/location) but blocks most cross-site subrequests (images/XHR).</p>
+</li>
+<li data-start="604" data-end="699">
+<p data-start="606" data-end="699"><strong data-start="606" data-end="622">None; Secure</strong> = send cookie cross-site (useful for login on CDNs, but dangerous for CSRF).</p>
+</li>
+</ul>
+<hr data-start="701" data-end="704">
+<h2 data-start="706" data-end="768">Lab: Token compared only to cookie (double-submit insecure)</h2>
+<p data-start="769" data-end="1263"><strong data-start="769" data-end="778">What:</strong> Server compares <code data-start="795" data-end="801">csrf</code> POST field to a <code data-start="818" data-end="824">csrf</code> cookie and accepts if they match.<br data-start="858" data-end="861">
+<strong data-start="861" data-end="880">Why vulnerable:</strong> Attacker can set <code data-start="898" data-end="904">csrf</code> cookie in victim and submit matching <code data-start="942" data-end="948">csrf</code> value → server accepts. Cookie/token are not tied to session.<br data-start="1010" data-end="1013">
+<strong data-start="1013" data-end="1031">Exploit (lab):</strong> Use a Set-Cookie injection or other endpoint to set <code data-start="1084" data-end="1090">csrf</code> cookie in victim, then submit form with that <code data-start="1136" data-end="1142">csrf</code> value.<br data-start="1149" data-end="1152">
+<strong data-start="1152" data-end="1160">Fix:</strong> Store token server-side per session and validate server-side; don’t trust cookie+param equality alone.</p>
+<hr data-start="1265" data-end="1268">
+<h2 data-start="1270" data-end="1302">Lab: Token present check only</h2>
+<p data-start="1303" data-end="1598"><strong data-start="1303" data-end="1312">What:</strong> Server checks only that a CSRF token parameter exists (not its value).<br data-start="1383" data-end="1386">
+<strong data-start="1386" data-end="1405">Why vulnerable:</strong> Attacker can include any token value; presence is enough.<br data-start="1463" data-end="1466">
+<strong data-start="1466" data-end="1478">Exploit:</strong> Auto-submit form with any <code data-start="1505" data-end="1511">csrf</code> param.<br data-start="1518" data-end="1521">
+<strong data-start="1521" data-end="1529">Fix:</strong> Use unpredictable per-session tokens and validate value server-side.</p>
+<hr data-start="1600" data-end="1603">
+<h2 data-start="1605" data-end="1653">Lab: Token not tied to session / shared token</h2>
+<p data-start="1654" data-end="1931"><strong data-start="1654" data-end="1663">What:</strong> Token is global or not uniquely bound to the session.<br data-start="1717" data-end="1720">
+<strong data-start="1720" data-end="1739">Why vulnerable:</strong> If token is same for all users or predictable, attacker reuses it.<br data-start="1806" data-end="1809">
+<strong data-start="1809" data-end="1821">Exploit:</strong> Reuse known token with forged request.<br data-start="1860" data-end="1863">
+<strong data-start="1863" data-end="1871">Fix:</strong> Per-session (or per-form) random tokens stored server-side.</p>
+<hr data-start="1933" data-end="1936">
+<h2 data-start="1938" data-end="1993">Lab: Token in non-session cookie (attacker-settable)</h2>
+<p data-start="1994" data-end="2365"><strong data-start="1994" data-end="2003">What:</strong> CSRF token lives in a cookie not bound to session and can be set by attacker flows.<br data-start="2087" data-end="2090">
+<strong data-start="2090" data-end="2109">Why vulnerable:</strong> Attacker can set cookie and submit matching form.<br data-start="2159" data-end="2162">
+<strong data-start="2162" data-end="2174">Exploit:</strong> Inject cookie via vulnerable endpoint, then submit form with matching token.<br data-start="2251" data-end="2254">
+<strong data-start="2254" data-end="2262">Fix:</strong> Keep authoritative token on server-side; if using cookies, they must be HttpOnly and bound to session.</p>
+<hr data-start="2367" data-end="2370">
+<h2 data-start="2372" data-end="2437">Lab: Double-submit (cookie + param) where cookie is duplicated</h2>
+<p data-start="2438" data-end="2887"><strong data-start="2438" data-end="2447">What:</strong> App stores CSRF token both in cookie and form, compares cookie vs param.<br data-start="2520" data-end="2523">
+<strong data-start="2523" data-end="2542">Why vulnerable:</strong> If cookie can be set or predicted, attacker can supply param to match. Double-submit only works if cookie cannot be set by attacker.<br data-start="2675" data-end="2678">
+<strong data-start="2678" data-end="2690">Exploit:</strong> Set cookie via injection or reuse predictable cookie value; submit matching form.<br data-start="2772" data-end="2775">
+<strong data-start="2775" data-end="2783">Fix:</strong> Use server-bound tokens, or ensure cookie cannot be attacker-controlled (but best to bind server-side).</p>
+<hr data-start="2889" data-end="2892">
+<h2 data-start="2894" data-end="2971">Lab: Set-Cookie injection via other endpoints (search / header reflection)</h2>
+<p data-start="2972" data-end="3554"><strong data-start="2972" data-end="2981">What:</strong> A harmless endpoint (search) reflects user input into headers, letting attacker craft a response that sets cookies in the victim’s browser.<br data-start="3121" data-end="3124">
+<strong data-start="3124" data-end="3143">Why vulnerable:</strong> <code data-start="3144" data-end="3156">Set-Cookie</code> can be injected into victim via reflected input (CRLF or header reflection).<br data-start="3233" data-end="3236">
+<strong data-start="3236" data-end="3254">Exploit (lab):</strong> Request <code data-start="3263" data-end="3320">/ ?search=...%0d%0aSet-Cookie: csrf=fake; SameSite=None</code> using an <code data-start="3330" data-end="3337">&lt;img&gt;</code> or redirect so victim’s browser sets <code data-start="3375" data-end="3386">csrf=fake</code>. Then submit form with <code data-start="3410" data-end="3421">csrf=fake</code>.<br data-start="3422" data-end="3425">
+<strong data-start="3425" data-end="3433">Fix:</strong> Sanitize inputs; never reflect user input into response headers; block CRLF injection. Also validate tokens server-side.</p>
+<hr data-start="3556" data-end="3559">
+<h2 data-start="3561" data-end="3623">Lab: Referer validation fallback (missing Referer accepted)</h2>
+<p data-start="3624" data-end="4125"><strong data-start="3624" data-end="3633">What:</strong> Server accepts requests if Referer contains site domain; but if Referer header is missing, the server falls back to allowing the request.<br data-start="3771" data-end="3774">
+<strong data-start="3774" data-end="3793">Why vulnerable:</strong> Some browsers or privacy settings drop Referer. Accepting missing Referer lets attacker bypass check.<br data-start="3895" data-end="3898">
+<strong data-start="3898" data-end="3910">Exploit:</strong> Send CSRF request from an environment that strips Referer (or rely on missing header) and server accepts.<br data-start="4016" data-end="4019">
+<strong data-start="4019" data-end="4027">Fix:</strong> Don’t accept missing Referer as pass. Use server-side CSRF tokens. Validate Origin when possible.</p>
+<hr data-start="4127" data-end="4130">
+<h2 data-start="4132" data-end="4202">Lab: SameSite Lax bypass via top-level navigation / method override</h2>
+<p data-start="4203" data-end="4584"><strong data-start="4203" data-end="4212">What:</strong> Cookies with <code data-start="4226" data-end="4240">SameSite=Lax</code> are sent on top-level navigations. Server accepts state change if request looks like a top-level navigation or uses method-override parameter.<br data-start="4383" data-end="4386">
+<strong data-start="4386" data-end="4405">Why vulnerable:</strong> Attack uses <code data-start="4418" data-end="4428">location</code> or link click to cause navigation that sends cookie, then server treats request as state-changing (via <code data-start="4532" data-end="4546">_method=POST</code> or accepts GET).<br data-start="4563" data-end="4566">
+<strong data-start="4566" data-end="4584">Exploit (lab):</strong></p>
+<pre class="overflow-visible!" data-start="4585" data-end="4728"><div class="contain-inline-size rounded-2xl relative bg-token-sidebar-surface-primary"><div class="flex items-center text-token-text-secondary px-4 py-2 text-xs font-sans justify-between h-9 bg-token-sidebar-surface-primary select-none rounded-t-2xl">js</div><div class="sticky top-9"><div class="absolute end-0 bottom-0 flex h-9 items-center pe-2"><div class="bg-token-bg-elevated-secondary text-token-text-secondary flex items-center gap-4 rounded-sm px-2 font-sans text-xs"><button class="flex gap-1 items-center select-none py-1" aria-label="Copy"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path d="M12.668 10.667C12.668 9.95614 12.668 9.46258 12.6367 9.0791C12.6137 8.79732 12.5758 8.60761 12.5244 8.46387L12.4688 8.33399C12.3148 8.03193 12.0803 7.77885 11.793 7.60254L11.666 7.53125C11.508 7.45087 11.2963 7.39395 10.9209 7.36328C10.5374 7.33197 10.0439 7.33203 9.33301 7.33203H6.5C5.78896 7.33203 5.29563 7.33195 4.91211 7.36328C4.63016 7.38632 4.44065 7.42413 4.29688 7.47559L4.16699 7.53125C3.86488 7.68518 3.61186 7.9196 3.43555 8.20703L3.36524 8.33399C3.28478 8.49198 3.22795 8.70352 3.19727 9.0791C3.16595 9.46259 3.16504 9.95611 3.16504 10.667V13.5C3.16504 14.211 3.16593 14.7044 3.19727 15.0879C3.22797 15.4636 3.28473 15.675 3.36524 15.833L3.43555 15.959C3.61186 16.2466 3.86474 16.4807 4.16699 16.6348L4.29688 16.6914C4.44063 16.7428 4.63025 16.7797 4.91211 16.8027C5.29563 16.8341 5.78896 16.835 6.5 16.835H9.33301C10.0439 16.835 10.5374 16.8341 10.9209 16.8027C11.2965 16.772 11.508 16.7152 11.666 16.6348L11.793 16.5645C12.0804 16.3881 12.3148 16.1351 12.4688 15.833L12.5244 15.7031C12.5759 15.5594 12.6137 15.3698 12.6367 15.0879C12.6681 14.7044 12.668 14.211 12.668 13.5V10.667ZM13.998 12.665C14.4528 12.6634 14.8011 12.6602 15.0879 12.6367C15.4635 12.606 15.675 12.5492 15.833 12.4688L15.959 12.3975C16.2466 12.2211 16.4808 11.9682 16.6348 11.666L16.6914 11.5361C16.7428 11.3924 16.7797 11.2026 16.8027 10.9209C16.8341 10.5374 16.835 10.0439 16.835 9.33301V6.5C16.835 5.78896 16.8341 5.29563 16.8027 4.91211C16.7797 4.63025 16.7428 4.44063 16.6914 4.29688L16.6348 4.16699C16.4807 3.86474 16.2466 3.61186 15.959 3.43555L15.833 3.36524C15.675 3.28473 15.4636 3.22797 15.0879 3.19727C14.7044 3.16593 14.211 3.16504 13.5 3.16504H10.667C9.9561 3.16504 9.46259 3.16595 9.0791 3.19727C8.79739 3.22028 8.6076 3.2572 8.46387 3.30859L8.33399 3.36524C8.03176 3.51923 7.77886 3.75343 7.60254 4.04102L7.53125 4.16699C7.4508 4.32498 7.39397 4.53655 7.36328 4.91211C7.33985 5.19893 7.33562 5.54719 7.33399 6.00195H9.33301C10.022 6.00195 10.5791 6.00131 11.0293 6.03809C11.4873 6.07551 11.8937 6.15471 12.2705 6.34668L12.4883 6.46875C12.984 6.7728 13.3878 7.20854 13.6533 7.72949L13.7197 7.87207C13.8642 8.20859 13.9292 8.56974 13.9619 8.9707C13.9987 9.42092 13.998 9.97799 13.998 10.667V12.665ZM18.165 9.33301C18.165 10.022 18.1657 10.5791 18.1289 11.0293C18.0961 11.4302 18.0311 11.7914 17.8867 12.1279L17.8203 12.2705C17.5549 12.7914 17.1509 13.2272 16.6553 13.5313L16.4365 13.6533C16.0599 13.8452 15.6541 13.9245 15.1963 13.9619C14.8593 13.9895 14.4624 13.9935 13.9951 13.9951C13.9935 14.4624 13.9895 14.8593 13.9619 15.1963C13.9292 15.597 13.864 15.9576 13.7197 16.2939L13.6533 16.4365C13.3878 16.9576 12.9841 17.3941 12.4883 17.6982L12.2705 17.8203C11.8937 18.0123 11.4873 18.0915 11.0293 18.1289C10.5791 18.1657 10.022 18.165 9.33301 18.165H6.5C5.81091 18.165 5.25395 18.1657 4.80371 18.1289C4.40306 18.0962 4.04235 18.031 3.70606 17.8867L3.56348 17.8203C3.04244 17.5548 2.60585 17.151 2.30176 16.6553L2.17969 16.4365C1.98788 16.0599 1.90851 15.6541 1.87109 15.1963C1.83431 14.746 1.83496 14.1891 1.83496 13.5V10.667C1.83496 9.978 1.83432 9.42091 1.87109 8.9707C1.90851 8.5127 1.98772 8.10625 2.17969 7.72949L2.30176 7.51172C2.60586 7.0159 3.04236 6.6122 3.56348 6.34668L3.70606 6.28027C4.04237 6.136 4.40303 6.07083 4.80371 6.03809C5.14051 6.01057 5.53708 6.00551 6.00391 6.00391C6.00551 5.53708 6.01057 5.14051 6.03809 4.80371C6.0755 4.34588 6.15483 3.94012 6.34668 3.56348L6.46875 3.34473C6.77282 2.84912 7.20856 2.44514 7.72949 2.17969L7.87207 2.11328C8.20855 1.96886 8.56979 1.90385 8.9707 1.87109C9.42091 1.83432 9.978 1.83496 10.667 1.83496H13.5C14.1891 1.83496 14.746 1.83431 15.1963 1.87109C15.6541 1.90851 16.0599 1.98788 16.4365 2.17969L16.6553 2.30176C17.151 2.60585 17.5548 3.04244 17.8203 3.56348L17.8867 3.70606C18.031 4.04235 18.0962 4.40306 18.1289 4.80371C18.1657 5.25395 18.165 5.81091 18.165 6.5V9.33301Z"></path></svg>Copy code</button></div></div></div><div class="overflow-y-auto p-4" dir="ltr"><code class="whitespace-pre! language-js"><span><span><span class="hljs-comment">// top-level navigation, cookie will be included under Lax</span></span><span>
+</span><span><span class="hljs-variable language_">document</span></span><span>.</span><span><span class="hljs-property">location</span></span><span> = </span><span><span class="hljs-string">"https://target/change-email?email=pwned&amp;_method=POST"</span></span><span>
+</span></span></code></div></div></pre>
+<p data-start="4729" data-end="4855"><strong data-start="4729" data-end="4737">Fix:</strong> Require CSRF tokens for unsafe actions even if request is a top-level navigation. Disable or protect method-override.</p>
+<hr data-start="4857" data-end="4860">
+<h2 data-start="4862" data-end="4933">Lab: SameSite Strict bypass via navigation chaining / sibling domain</h2>
+<p data-start="4934" data-end="5535"><strong data-start="4934" data-end="4943">What:</strong> <code data-start="4944" data-end="4961">SameSite=Strict</code> blocks most cross-site cookie sends, but trick flows (sibling domains, redirects, or document.domain tricks) can cause cookie to be sent or sibling-origin flows to be treated as same-site.<br data-start="5150" data-end="5153">
+<strong data-start="5153" data-end="5172">Why vulnerable:</strong> Cookie scoping or redirect chains can lead browser to include cookie despite Strict in some corner cases.<br data-start="5278" data-end="5281">
+<strong data-start="5281" data-end="5293">Exploit:</strong> Use an attacker-controlled sibling domain or chained navigations to make the request appear same-site and get cookie sent.<br data-start="5416" data-end="5419">
+<strong data-start="5419" data-end="5427">Fix:</strong> Scope cookies to exact subdomain when possible, fix redirect flows, and always use server-side CSRF tokens.</p>
+<hr data-start="5537" data-end="5540">
+<h2 data-start="5542" data-end="5579">Lab: Cookie refresh / Lax chaining</h2>
+<p data-start="5580" data-end="6057"><strong data-start="5580" data-end="5589">What:</strong> An initial allowed top-level navigation refreshes auth cookie; a follow-up request from same context now carries refreshed cookie and can change state.<br data-start="5741" data-end="5744">
+<strong data-start="5744" data-end="5763">Why vulnerable:</strong> Attacker forces a navigation that causes the site to refresh a cookie, then quickly sends the action request.<br data-start="5873" data-end="5876">
+<strong data-start="5876" data-end="5888">Exploit:</strong> Chain navigations: first refresh cookie (allowed under Lax), then cause state change.<br data-start="5974" data-end="5977">
+<strong data-start="5977" data-end="5985">Fix:</strong> Don’t rely on cookie refresh behavior; validate CSRF tokens on actions.</p>
+<hr data-start="6059" data-end="6062">
+<h2 data-start="6064" data-end="6139">Lab: Endpoint accepts GET for state change (method canonicalization bug)</h2>
+<p data-start="6140" data-end="6612"><strong data-start="6140" data-end="6149">What:</strong> Server processes state changes when it receives GET or when method override is used.<br data-start="6234" data-end="6237">
+<strong data-start="6237" data-end="6256">Why vulnerable:</strong> GET requests are easy to cause across sites (images, redirects). If GET changes state, CSRF is trivial.<br data-start="6360" data-end="6363">
+<strong data-start="6363" data-end="6381">Exploit (lab):</strong> Use <code data-start="6386" data-end="6437">&lt;img src="https://target/change-email?email=..."&gt;</code> or <code data-start="6441" data-end="6452">location=</code> redirect to cause GET that changes email.<br data-start="6494" data-end="6497">
+<strong data-start="6497" data-end="6505">Fix:</strong> Never allow GET for state changes. Normalize method server-side and require CSRF token for unsafe methods.</p>
+<hr data-start="6614" data-end="6617">
+<h2 data-start="6619" data-end="6698">Lab: Redirect parameter / directory traversal to force action (postId trick)</h2>
+<p data-start="6699" data-end="7011"><strong data-start="6699" data-end="6708">What:</strong> A redirect/confirmation endpoint takes a parameter (like <code data-start="6766" data-end="6774">postId</code>) and includes it in a redirect path. Path traversal in param can redirect to a state-changing URL.<br data-start="6873" data-end="6876">
+<strong data-start="6876" data-end="6895">Why vulnerable:</strong> Unsanitized path param lets attacker craft path that ends up requesting change-email as a GET.<br data-start="6990" data-end="6993">
+<strong data-start="6993" data-end="7011">Exploit (lab):</strong></p>
+<pre class="overflow-visible!" data-start="7012" data-end="7160"><div class="contain-inline-size rounded-2xl relative bg-token-sidebar-surface-primary"><div class="flex items-center text-token-text-secondary px-4 py-2 text-xs font-sans justify-between h-9 bg-token-sidebar-surface-primary select-none rounded-t-2xl">js</div><div class="sticky top-9"><div class="absolute end-0 bottom-0 flex h-9 items-center pe-2"><div class="bg-token-bg-elevated-secondary text-token-text-secondary flex items-center gap-4 rounded-sm px-2 font-sans text-xs"><button class="flex gap-1 items-center select-none py-1" aria-label="Copy"><svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path d="M12.668 10.667C12.668 9.95614 12.668 9.46258 12.6367 9.0791C12.6137 8.79732 12.5758 8.60761 12.5244 8.46387L12.4688 8.33399C12.3148 8.03193 12.0803 7.77885 11.793 7.60254L11.666 7.53125C11.508 7.45087 11.2963 7.39395 10.9209 7.36328C10.5374 7.33197 10.0439 7.33203 9.33301 7.33203H6.5C5.78896 7.33203 5.29563 7.33195 4.91211 7.36328C4.63016 7.38632 4.44065 7.42413 4.29688 7.47559L4.16699 7.53125C3.86488 7.68518 3.61186 7.9196 3.43555 8.20703L3.36524 8.33399C3.28478 8.49198 3.22795 8.70352 3.19727 9.0791C3.16595 9.46259 3.16504 9.95611 3.16504 10.667V13.5C3.16504 14.211 3.16593 14.7044 3.19727 15.0879C3.22797 15.4636 3.28473 15.675 3.36524 15.833L3.43555 15.959C3.61186 16.2466 3.86474 16.4807 4.16699 16.6348L4.29688 16.6914C4.44063 16.7428 4.63025 16.7797 4.91211 16.8027C5.29563 16.8341 5.78896 16.835 6.5 16.835H9.33301C10.0439 16.835 10.5374 16.8341 10.9209 16.8027C11.2965 16.772 11.508 16.7152 11.666 16.6348L11.793 16.5645C12.0804 16.3881 12.3148 16.1351 12.4688 15.833L12.5244 15.7031C12.5759 15.5594 12.6137 15.3698 12.6367 15.0879C12.6681 14.7044 12.668 14.211 12.668 13.5V10.667ZM13.998 12.665C14.4528 12.6634 14.8011 12.6602 15.0879 12.6367C15.4635 12.606 15.675 12.5492 15.833 12.4688L15.959 12.3975C16.2466 12.2211 16.4808 11.9682 16.6348 11.666L16.6914 11.5361C16.7428 11.3924 16.7797 11.2026 16.8027 10.9209C16.8341 10.5374 16.835 10.0439 16.835 9.33301V6.5C16.835 5.78896 16.8341 5.29563 16.8027 4.91211C16.7797 4.63025 16.7428 4.44063 16.6914 4.29688L16.6348 4.16699C16.4807 3.86474 16.2466 3.61186 15.959 3.43555L15.833 3.36524C15.675 3.28473 15.4636 3.22797 15.0879 3.19727C14.7044 3.16593 14.211 3.16504 13.5 3.16504H10.667C9.9561 3.16504 9.46259 3.16595 9.0791 3.19727C8.79739 3.22028 8.6076 3.2572 8.46387 3.30859L8.33399 3.36524C8.03176 3.51923 7.77886 3.75343 7.60254 4.04102L7.53125 4.16699C7.4508 4.32498 7.39397 4.53655 7.36328 4.91211C7.33985 5.19893 7.33562 5.54719 7.33399 6.00195H9.33301C10.022 6.00195 10.5791 6.00131 11.0293 6.03809C11.4873 6.07551 11.8937 6.15471 12.2705 6.34668L12.4883 6.46875C12.984 6.7728 13.3878 7.20854 13.6533 7.72949L13.7197 7.87207C13.8642 8.20859 13.9292 8.56974 13.9619 8.9707C13.9987 9.42092 13.998 9.97799 13.998 10.667V12.665ZM18.165 9.33301C18.165 10.022 18.1657 10.5791 18.1289 11.0293C18.0961 11.4302 18.0311 11.7914 17.8867 12.1279L17.8203 12.2705C17.5549 12.7914 17.1509 13.2272 16.6553 13.5313L16.4365 13.6533C16.0599 13.8452 15.6541 13.9245 15.1963 13.9619C14.8593 13.9895 14.4624 13.9935 13.9951 13.9951C13.9935 14.4624 13.9895 14.8593 13.9619 15.1963C13.9292 15.597 13.864 15.9576 13.7197 16.2939L13.6533 16.4365C13.3878 16.9576 12.9841 17.3941 12.4883 17.6982L12.2705 17.8203C11.8937 18.0123 11.4873 18.0915 11.0293 18.1289C10.5791 18.1657 10.022 18.165 9.33301 18.165H6.5C5.81091 18.165 5.25395 18.1657 4.80371 18.1289C4.40306 18.0962 4.04235 18.031 3.70606 17.8867L3.56348 17.8203C3.04244 17.5548 2.60585 17.151 2.30176 16.6553L2.17969 16.4365C1.98788 16.0599 1.90851 15.6541 1.87109 15.1963C1.83431 14.746 1.83496 14.1891 1.83496 13.5V10.667C1.83496 9.978 1.83432 9.42091 1.87109 8.9707C1.90851 8.5127 1.98772 8.10625 2.17969 7.72949L2.30176 7.51172C2.60586 7.0159 3.04236 6.6122 3.56348 6.34668L3.70606 6.28027C4.04237 6.136 4.40303 6.07083 4.80371 6.03809C5.14051 6.01057 5.53708 6.00551 6.00391 6.00391C6.00551 5.53708 6.01057 5.14051 6.03809 4.80371C6.0755 4.34588 6.15483 3.94012 6.34668 3.56348L6.46875 3.34473C6.77282 2.84912 7.20856 2.44514 7.72949 2.17969L7.87207 2.11328C8.20855 1.96886 8.56979 1.90385 8.9707 1.87109C9.42091 1.83432 9.978 1.83496 10.667 1.83496H13.5C14.1891 1.83496 14.746 1.83431 15.1963 1.87109C15.6541 1.90851 16.0599 1.98788 16.4365 2.17969L16.6553 2.30176C17.151 2.60585 17.5548 3.04244 17.8203 3.56348L17.8867 3.70606C18.031 4.04235 18.0962 4.40306 18.1289 4.80371C18.1657 5.25395 18.165 5.81091 18.165 6.5V9.33301Z"></path></svg>Copy code</button></div></div></div><div class="overflow-y-auto p-4" dir="ltr"><code class="whitespace-pre! language-js"><span><span><span class="hljs-variable language_">document</span></span><span>.</span><span><span class="hljs-property">location</span></span><span> = </span><span><span class="hljs-string">"https://TARGET/post/comment/confirmation?postId=1/../../my-account/change-email?email=pwned%40example.com%26submit=1"</span></span><span>
+</span></span></code></div></div></pre>
+<p data-start="7161" data-end="7309"><strong data-start="7161" data-end="7169">Fix:</strong> Validate redirect/ID params strictly (integers or known slugs). Don’t allow arbitrary path injection. Require CSRF tokens on final actions.</p>
+<hr data-start="7311" data-end="7314">
+<h2 data-start="7316" data-end="7363">Quick Burp tests to run for any lab (always)</h2>
+<ul data-start="7364" data-end="7840">
+<li data-start="7364" data-end="7423">
+<p data-start="7366" data-end="7423">Capture the real request. Check cookies and CSRF param.</p>
+</li>
+<li data-start="7424" data-end="7524">
+<p data-start="7426" data-end="7524">In Repeater: swap cookie values between two accounts. If swap works → token not tied to session.</p>
+</li>
+<li data-start="7525" data-end="7620">
+<p data-start="7527" data-end="7620">In Repeater: change method to GET. If it still changes state → state-changing GET accepted.</p>
+</li>
+<li data-start="7621" data-end="7742">
+<p data-start="7623" data-end="7742">Test search/other endpoints for header reflection: send payloads with <code data-start="7693" data-end="7712">%0d%0aSet-Cookie:</code> and check response headers.</p>
+</li>
+<li data-start="7743" data-end="7840">
+<p data-start="7745" data-end="7840">Use browser exploit page: auto-submit form, image tag, or <code data-start="7803" data-end="7814">location=</code> to confirm exploit works.</p>
+</li>
+</ul>
+<hr data-start="7842" data-end="7845">
+<h2 data-start="7847" data-end="7887">Short developer checklist (must-have)</h2>
+<ol data-start="7888" data-end="8481">
+<li data-start="7888" data-end="7961">
+<p data-start="7891" data-end="7961"><strong data-start="7891" data-end="7918">Server-side CSRF tokens</strong> bound to session (validate server-side).</p>
+</li>
+<li data-start="7962" data-end="8040">
+<p data-start="7965" data-end="8040"><strong data-start="7965" data-end="7997">Block state changes over GET</strong>. Normalize and check method server-side.</p>
+</li>
+<li data-start="8041" data-end="8132">
+<p data-start="8044" data-end="8132"><strong data-start="8044" data-end="8063">Sanitize inputs</strong> — never reflect user input into headers (no Set-Cookie injection).</p>
+</li>
+<li data-start="8133" data-end="8220">
+<p data-start="8136" data-end="8220"><strong data-start="8136" data-end="8158">Limit cookie scope</strong> (subdomain), use <code data-start="8176" data-end="8186">HttpOnly</code> and <code data-start="8191" data-end="8201">SameSite</code> as extra layers.</p>
+</li>
+<li data-start="8221" data-end="8300">
+<p data-start="8224" data-end="8300"><strong data-start="8224" data-end="8261">Disable insecure method-overrides</strong> or require CSRF after normalization.</p>
+</li>
+<li data-start="8301" data-end="8396">
+<p data-start="8304" data-end="8396"><strong data-start="8304" data-end="8328">Check Origin/Referer</strong> as defense-in-depth, but don’t allow missing header to mean “OK”.</p>
+</li>
+<li data-start="8397" data-end="8481">
+<p data-start="8400" data-end="8481"><strong data-start="8400" data-end="8435">Test by swapping tokens/cookies</strong> and by attempting cross-site form navigation.</p>
+</li>
+</ol>
+<hr data-start="8483" data-end="8486">
+            </article>
+        </div>
+    </main>
+    <script src="../js/notes.js"></script>
+</body>
+</html>

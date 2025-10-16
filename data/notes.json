@@ -38,5 +38,16 @@
         ],
         "category": "Web Security",
         "date": "2025-10-16"
+    },
+    {
+      "title": "CSRF-Intermediate",
+      "excerpt": "<h1 data-start=\"340\" data-end=\"373\">SameSite quick recap (one line)</h1>\n<p data-start=\"374\" data-end=\"444\">SameSite controls when browsers send cooki...",
+      "path": "notes/csrfintermediate.html",
+      "tags": [
+        "Critical",
+        "Web Security"
+      ],
+      "category": "Web Security",
+      "date": "2025-10-16"
     }
 ]
