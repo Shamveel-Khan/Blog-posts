@@ -27,5 +27,16 @@
         "tags": [],
         "category": "Web Security",
         "date": "2025-07-24"
+    },
+    {
+        "title": "CSRF",
+        "excerpt": "CSRF — Basics (simple & direct)\n What is CSRF?\n\nA website action (like changing an email) is triggered by the victim’s browser while they’re logged in...",
+        "path": "notes/csrf.html",
+        "tags": [
+          "Critical",
+          "Web Security"
+        ],
+        "category": "Web Security",
+        "date": "2025-10-16"
     }
 ]
