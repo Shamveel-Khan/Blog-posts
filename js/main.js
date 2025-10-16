@@ -164,6 +164,7 @@ async function fetchNotes() {
     try {
         const response = await fetch('data/notes.json');
         const notes = await response.json();
+        console.log(notes);
         
         // Render all notes initially
         renderNoteCards(notes);

